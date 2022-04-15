@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="'/posts/' + id" class="post-preview">
+  <NuxtLink :to="postLink" class="post-preview">
     <article>
       <div
         class="post-thumbnail"
@@ -16,7 +16,23 @@
 <script lang="ts">
 import Vue from "vue";
 
-export default Vue.extend({
+interface Data {}
+
+interface Methods {}
+
+interface Computed {
+  postLink: string;
+}
+
+interface Props {
+  id: string;
+  title: string;
+  previewText: string;
+  thumbnail: string;
+  isAdmin: boolean;
+}
+
+export default Vue.extend<Data, Methods, Computed, Props>({
   name: "PostPreview",
   props: {
     id: {
@@ -34,6 +50,15 @@ export default Vue.extend({
     thumbnail: {
       type: String,
       required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  computed: {
+    postLink() {
+      return this.isAdmin ? "/admin/" + this.id : "/posts/" + this.id;
     },
   },
 });
