@@ -17,6 +17,8 @@ export default {
     ],
   },
 
+  transpileDependencies: ["vuex-module-decorators"],
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
