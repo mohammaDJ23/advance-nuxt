@@ -1,4 +1,17 @@
 export default {
+  ssr: true,
+
+  // this loading is for when ssr is true
+
+  loading: { color: "#fa923f", height: "4px", duration: 5000 },
+
+  // this loading is for when ssr is false
+
+  loadingIndicator: {
+    name: "circle",
+    color: "#fa923f",
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "advance-nuxt",
@@ -20,10 +33,10 @@ export default {
   transpileDependencies: ["vuex-module-decorators"],
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ["~assets/styles"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ["~plugins/pre-load-components.ts", "~plugins/date-filter.ts"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -32,6 +45,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/typescript
     "@nuxt/typescript-build",
+    "@nuxt/components",
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -57,4 +71,18 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  env: {
+    FIREBASE_URL:
+      process.env.FIREBASE_URL ||
+      "https://nuxt-blog-793e5-default-rtdb.firebaseio.com",
+  },
+
+  // it will apply some styles when the page changes
+  // the styles used in assets folder
+
+  transition: {
+    name: "fade",
+    mode: "out-in",
+  },
 };

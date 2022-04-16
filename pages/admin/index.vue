@@ -7,6 +7,8 @@
     </section>
     <section class="existing-posts">
       <h1>Existing Posts</h1>
+      <!-- this component was preloaded in the plugin folder -->
+
       <PostList isAdmin :posts="loadedPost" />
     </section>
   </div>
@@ -14,12 +16,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import PostList from "../../components/posts/PostList.vue";
 import AppButton from "../../components/UI/AppButton.vue";
 
 export default Vue.extend({
   components: {
-    PostList,
     AppButton,
   },
   // @ts-ignore
@@ -28,7 +28,8 @@ export default Vue.extend({
   async asyncData({ $axios, error }) {
     try {
       const data = await $axios.$get(
-        "https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts.json"
+        // @ts-ignore
+        `${process.env.FIREBASE_URL}/posts.json`
       );
 
       const arrData = [];

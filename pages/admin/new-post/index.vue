@@ -19,7 +19,8 @@ export default Vue.extend({
   methods: {
     async submit(data: any) {
       const res = await this.$axios.$post(
-        "https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts.json",
+        // @ts-ignore
+        `${process.env.FIREBASE_URL}/posts.json`,
         data
       );
 

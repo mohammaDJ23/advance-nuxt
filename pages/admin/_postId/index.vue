@@ -18,14 +18,15 @@ export default Vue.extend({
   layout: "admin",
   // @ts-ignore
   async fetch({ $axios, store, params, error }) {
-    return $axios
-      .$get(
-        `https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts/${params.postId}.json`
-      )
-      .then((data) => {
-        store.dispatch("setPost", data);
-      })
-      .catch((err) => error(err));
+    return (
+      $axios
+        // @ts-ignore
+        .$get(`${process.env.FIREBASE_URL}/posts/${params.postId}.json`)
+        .then((data) => {
+          store.dispatch("setPost", data);
+        })
+        .catch((err) => error(err))
+    );
   },
   computed: {
     loadedPost() {
@@ -35,7 +36,8 @@ export default Vue.extend({
   methods: {
     async submit(data: any) {
       const res = await this.$axios.$put(
-        `https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts/${this.$route.params.postId}.json`,
+        // @ts-ignore
+        `${process.env.FIREBASE_URL}/posts/${this.$route.params.postId}.json`,
         data
       );
 

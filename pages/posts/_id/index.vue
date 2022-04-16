@@ -4,7 +4,9 @@
       <h1 class="post-title">{{ loadedPost.title }}</h1>
       <div class="post-details">
         <div class="post-detail">
-          Last updated on {{ loadedPost.updatedDate }}
+          <!-- date method here, definded in the plugins and was imported though plugins with nuxt.config.js -->
+
+          Last updated on {{ loadedPost.updatedDate | date }}
         </div>
         <div class="post-detail">Written by {{ loadedPost.author }}</div>
       </div>
@@ -29,7 +31,8 @@ export default Vue.extend({
   async fetch({ $axios, store, params, error }) {
     return $axios
       .$get(
-        `https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts/${params.id}.json`
+        // @ts-ignore
+        `${process.env.FIREBASE_URL}/posts/${params.id}.json`
       )
       .then((data) => {
         store.dispatch("setPost", data);

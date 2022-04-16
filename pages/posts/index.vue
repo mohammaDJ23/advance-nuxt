@@ -1,23 +1,21 @@
 <template>
   <div class="posts-page">
+    <!-- this component was preloaded in the plugin folder -->
+
     <PostList :posts="posts" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import PostList from "../../components/posts/PostList.vue";
 
 export default Vue.extend({
-  components: {
-    PostList,
-  },
-
   // @ts-ignore
   async fetch({ $axios, error, store }) {
     try {
       const data = await $axios.$get(
-        "https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts.json"
+        // @ts-ignore
+        `${process.env.FIREBASE_URL}/posts.json`
       );
 
       const arrData = [];

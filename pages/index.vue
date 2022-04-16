@@ -3,13 +3,15 @@
     <section class="intro">
       <h1>Get the latest tech news!</h1>
     </section>
+
+    <!-- this component was preloaded in the plugin folder -->
+
     <PostList :posts="loadedPost" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import PostList from "../components/posts/PostList.vue";
 
 interface Data {}
 
@@ -21,14 +23,12 @@ interface Props {}
 
 export default Vue.extend<Data, Methods, Computed, Props>({
   name: "IndexPage",
-  components: {
-    PostList,
-  },
   // @ts-ignore
   async asyncData({ $axios, error }) {
     try {
       const data = await $axios.$get(
-        "https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts.json"
+        // @ts-ignore
+        `${process.env.FIREBASE_URL}/posts.json`
       );
 
       const arrData = [];
