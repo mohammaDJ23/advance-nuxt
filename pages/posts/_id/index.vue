@@ -1,12 +1,14 @@
 <template>
   <div class="single-post-page">
     <section class="post">
-      <h1 class="post-title">Title of the Post</h1>
+      <h1 class="post-title">{{ loadedPost.title }}</h1>
       <div class="post-details">
-        <div class="post-detail">Last updated on XXX</div>
-        <div class="post-detail">Written by NAME</div>
+        <div class="post-detail">
+          Last updated on {{ loadedPost.updatedData }}
+        </div>
+        <div class="post-detail">Written by {{ loadedPost.author }}</div>
       </div>
-      <p class="post-content">Content of the post</p>
+      <p class="post-content">{{ loadedPost.content }}</p>
     </section>
     <section class="post-feedback">
       <p>
@@ -18,6 +20,38 @@
     </section>
   </div>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  // @ts-ignore
+  async asyncData(context) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({
+          loadedPost: {
+            id: "1",
+            title: `First post with id ${context.route.params.id}`,
+            previewText: "This is our first post",
+            author: "Mohammad",
+            updatedData: new Date(),
+            content: "Some dummy text which is definitely not great",
+            thumbnail:
+              "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
+          },
+        });
+      }, 2000);
+    })
+      .then((data) => data)
+      .catch(() => {
+        // it would handle by nuxt and will redirect the user to error page that located in laygout
+
+        context.error(new Error("Something went wrong"));
+      });
+  },
+});
+</script>
 
 <style scoped>
 .single-post-page {

@@ -1,25 +1,13 @@
 <template>
   <section class="featured-posts">
     <PostPreview
+      v-for="post in posts"
+      :key="post.id"
       :is-admin="isAdmin"
-      id="1"
-      thumbnail="https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg"
-      title="Hello there!"
-      previewText="This my first post!"
-    />
-    <PostPreview
-      :is-admin="isAdmin"
-      id="2"
-      thumbnail="https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg"
-      title="Hello there - the second time!"
-      previewText="This my second post!"
-    />
-    <PostPreview
-      :is-admin="isAdmin"
-      id="3"
-      thumbnail="https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg"
-      title="Hi!"
-      previewText="This my third post!"
+      :id="post.id"
+      :thumbnail="post.thumbnail"
+      :title="post.title"
+      :previewText="post.previewText"
     />
   </section>
 </template>
@@ -27,6 +15,13 @@
 <script lang="ts">
 import Vue from "vue";
 import PostPreview from "./PostPreview.vue";
+
+interface Post {
+  id: string;
+  thumbnail: string;
+  title: string;
+  previewText: string;
+}
 
 interface Data {}
 
@@ -36,6 +31,7 @@ interface Computed {}
 
 interface Props {
   isAdmin: boolean;
+  posts: Post[];
 }
 
 export default Vue.extend<Data, Methods, Computed, Props>({
@@ -48,6 +44,10 @@ export default Vue.extend<Data, Methods, Computed, Props>({
       type: Boolean,
       required: false,
       default: false,
+    },
+    posts: {
+      type: Array,
+      required: true,
     },
   },
 });

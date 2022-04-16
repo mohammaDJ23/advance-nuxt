@@ -3,7 +3,7 @@
     <section class="intro">
       <h1>Get the latest tech news!</h1>
     </section>
-    <PostList />
+    <PostList :posts="loadedPost" />
   </div>
 </template>
 
@@ -11,10 +11,58 @@
 import Vue from "vue";
 import PostList from "../components/posts/PostList.vue";
 
-export default Vue.extend({
+interface Data {}
+
+interface Methods {}
+
+interface Computed {}
+
+interface Props {}
+
+export default Vue.extend<Data, Methods, Computed, Props>({
   name: "IndexPage",
   components: {
     PostList,
+  },
+  // @ts-ignore
+  async asyncData(context) {
+    // you should return a promise
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          loadedPost: [
+            {
+              id: "1",
+              thumbnail:
+                "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
+              title: "first post",
+              previewText: "this is our first post",
+            },
+            {
+              id: "2",
+              thumbnail:
+                "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
+              title: "first post",
+              previewText: "this is our first post",
+            },
+            {
+              id: "3",
+              thumbnail:
+                "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
+              title: "first post",
+              previewText: "this is our first post",
+            },
+          ],
+        });
+      }, 2000);
+    })
+      .then((data) => data)
+      .catch((err) => {
+        // it would handle by nuxt and will redirect the user to error page that located in laygout
+
+        context.error(new Error("Something went wrong"));
+      });
   },
 });
 </script>
