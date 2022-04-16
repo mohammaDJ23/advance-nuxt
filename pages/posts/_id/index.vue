@@ -4,7 +4,7 @@
       <h1 class="post-title">{{ loadedPost.title }}</h1>
       <div class="post-details">
         <div class="post-detail">
-          Last updated on {{ loadedPost.updatedData }}
+          Last updated on {{ loadedPost.updatedDate }}
         </div>
         <div class="post-detail">Written by {{ loadedPost.author }}</div>
       </div>
@@ -26,29 +26,20 @@ import Vue from "vue";
 
 export default Vue.extend({
   // @ts-ignore
-  async asyncData(context) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({
-          loadedPost: {
-            id: "1",
-            title: `First post with id ${context.route.params.id}`,
-            previewText: "This is our first post",
-            author: "Mohammad",
-            updatedData: new Date(),
-            content: "Some dummy text which is definitely not great",
-            thumbnail:
-              "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-          },
-        });
-      }, 2000);
-    })
-      .then((data) => data)
-      .catch(() => {
-        // it would handle by nuxt and will redirect the user to error page that located in laygout
-
-        context.error(new Error("Something went wrong"));
-      });
+  async fetch({ $axios, store, params, error }) {
+    return $axios
+      .$get(
+        `https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts/${params.id}.json`
+      )
+      .then((data) => {
+        store.dispatch("setPost", data);
+      })
+      .catch((err) => error(err));
+  },
+  computed: {
+    loadedPost() {
+      return this.$store.getters.getPost;
+    },
   },
 });
 </script>

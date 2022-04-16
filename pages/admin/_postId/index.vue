@@ -1,7 +1,7 @@
 <template>
   <div class="admin-post-page">
     <section class="update-form">
-      <AdminPostForm :post="loadedPost" />
+      <AdminPostForm :post="loadedPost" @submit="submit" />
     </section>
   </div>
 </template>
@@ -16,16 +16,33 @@ export default Vue.extend({
   },
   // @ts-ignore
   layout: "admin",
-  data() {
-    return {
-      loadedPost: {
-        author: "Mohammad",
-        title: "astounding",
-        content: "hey man come on",
-        thumbnailLink:
-          "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-      },
-    };
+  // @ts-ignore
+  async fetch({ $axios, store, params, error }) {
+    return $axios
+      .$get(
+        `https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts/${params.postId}.json`
+      )
+      .then((data) => {
+        store.dispatch("setPost", data);
+      })
+      .catch((err) => error(err));
+  },
+  computed: {
+    loadedPost() {
+      return this.$store.getters.getPost;
+    },
+  },
+  methods: {
+    async submit(data: any) {
+      const res = await this.$axios.$put(
+        `https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts/${this.$route.params.postId}.json`,
+        data
+      );
+
+      if (res) {
+        this.$router.push("/admin");
+      }
+    },
   },
 });
 </script>

@@ -7,7 +7,7 @@
     </section>
     <section class="existing-posts">
       <h1>Existing Posts</h1>
-      <PostList isAdmin />
+      <PostList isAdmin :posts="loadedPost" />
     </section>
   </div>
 </template>
@@ -24,6 +24,35 @@ export default Vue.extend({
   },
   // @ts-ignore
   layout: "admin",
+  // @ts-ignore
+  async asyncData({ $axios, error }) {
+    try {
+      const data = await $axios.$get(
+        "https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts.json"
+      );
+
+      const arrData = [];
+
+      for (const key in data) {
+        arrData.push({
+          ...data[key],
+          id: key,
+        });
+      }
+
+      return { data: arrData };
+    } catch (err) {
+      error(err as any);
+    }
+  },
+  created() {
+    this.$store.dispatch("setPosts", this.data);
+  },
+  computed: {
+    loadedPost() {
+      return this.$store.getters.getAll;
+    },
+  },
 });
 </script>
 

@@ -25,44 +25,36 @@ export default Vue.extend<Data, Methods, Computed, Props>({
     PostList,
   },
   // @ts-ignore
-  async asyncData(context) {
-    // you should return a promise
+  async asyncData({ $axios, error }) {
+    try {
+      const data = await $axios.$get(
+        "https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts.json"
+      );
 
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          loadedPost: [
-            {
-              id: "1",
-              thumbnail:
-                "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-              title: "first post",
-              previewText: "this is our first post",
-            },
-            {
-              id: "2",
-              thumbnail:
-                "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-              title: "first post",
-              previewText: "this is our first post",
-            },
-            {
-              id: "3",
-              thumbnail:
-                "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-              title: "first post",
-              previewText: "this is our first post",
-            },
-          ],
+      const arrData = [];
+
+      for (const key in data) {
+        arrData.push({
+          ...data[key],
+          id: key,
         });
-      }, 2000);
-    })
-      .then((data) => data)
-      .catch((err) => {
-        // it would handle by nuxt and will redirect the user to error page that located in laygout
+      }
 
-        context.error(new Error("Something went wrong"));
-      });
+      return { data: arrData };
+    } catch (err) {
+      error(err as any);
+    }
+  },
+  created() {
+    this.$store.dispatch("setPosts", this.data);
+  },
+  computed: {
+    loadedPost() {
+      return this.$store.getters.getAll;
+    },
+  },
+  head: {
+    title: "Root",
   },
 });
 </script>

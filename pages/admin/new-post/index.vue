@@ -1,7 +1,7 @@
 <template>
   <div class="admin-new-post-page">
     <section class="new-post-form">
-      <AdminPostForm />
+      <AdminPostForm @submit="submit" />
     </section>
   </div>
 </template>
@@ -16,6 +16,16 @@ export default Vue.extend({
   },
   // @ts-ignore
   layout: "admin",
+  methods: {
+    async submit(data: any) {
+      const res = await this.$axios.$post(
+        "https://nuxt-blog-793e5-default-rtdb.firebaseio.com/posts.json",
+        data
+      );
+
+      console.log(res);
+    },
+  },
 });
 </script>
 

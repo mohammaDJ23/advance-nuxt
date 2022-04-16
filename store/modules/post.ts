@@ -10,21 +10,29 @@ interface Post {
 
 export interface State {
   loadedPosts: Post[];
+  post: Post | {};
 }
 
 const state: () => State = () => ({
   loadedPosts: [],
+  post: {},
 });
 
 const getters: GetterTree<State, RootState> = {
   getAll(state) {
     return state.loadedPosts;
   },
+  getPost(state) {
+    return state.post;
+  },
 };
 
 const mutations: MutationTree<State> = {
   setPosts(state, posts: Post[]) {
     state.loadedPosts = posts;
+  },
+  setPost(state, post: Post) {
+    state.post = post;
   },
 };
 
@@ -39,6 +47,9 @@ const actions: ActionTree<State, RootState> = {
   },
   setPosts(context, posts: Post[]) {
     context.commit("setPosts", posts);
+  },
+  setPost(context, post: Post) {
+    context.commit("setPost", post);
   },
 };
 
