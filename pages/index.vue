@@ -23,6 +23,10 @@ interface Props {}
 
 export default Vue.extend<Data, Methods, Computed, Props>({
   name: "IndexPage",
+
+  // @ts-ignore
+  middleware: ["log"],
+
   // @ts-ignore
   async asyncData({ $axios, error }) {
     try {
@@ -45,14 +49,17 @@ export default Vue.extend<Data, Methods, Computed, Props>({
       error(err as any);
     }
   },
+
   created() {
     this.$store.dispatch("setPosts", this.data);
   },
+
   computed: {
     loadedPost() {
       return this.$store.getters.getAll;
     },
   },
+
   head: {
     title: "Root",
   },
