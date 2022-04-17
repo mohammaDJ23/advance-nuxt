@@ -1,9 +1,13 @@
 <template>
   <div class="admin-auth-page">
     <div class="auth-container">
-      <form>
-        <AppControlInput type="email">E-Mail Address</AppControlInput>
-        <AppControlInput type="password">Password</AppControlInput>
+      <form @submit.prevent="submit">
+        <AppControlInput type="email" v-model="email"
+          >E-Mail Address</AppControlInput
+        >
+        <AppControlInput type="password" v-model="password"
+          >Password</AppControlInput
+        >
         <AppButton type="submit">{{ isLogin ? "Login" : "Sign Up" }}</AppButton>
         <AppButton
           type="button"
@@ -22,11 +26,15 @@ import Vue from "vue";
 import AppControlInput from "../../../components/UI/AppControlInput.vue";
 import AppButton from "../../../components/UI/AppButton.vue";
 
-interface Data {
+export interface Data {
   isLogin: boolean;
+  email: string;
+  password: string;
 }
 
-interface Methods {}
+interface Methods {
+  submit(): void;
+}
 
 interface Computed {}
 
@@ -36,6 +44,8 @@ export default Vue.extend<Data, Methods, Computed, Props>({
   name: "AdminAuthPage",
   // @ts-ignore
   layout: "admin",
+  // @ts-ignore
+  middleware: ["init-token-state", "auth"],
   components: {
     AppControlInput,
     AppButton,
@@ -43,7 +53,19 @@ export default Vue.extend<Data, Methods, Computed, Props>({
   data() {
     return {
       isLogin: true,
+      password: "",
+      email: "",
     };
+  },
+  methods: {
+    submit() {
+      this.$store.dispatch("submit", {
+        email: this.email,
+        password: this.password,
+        isLogin: this.isLogin,
+        returnSecureToken: true,
+      });
+    },
   },
 });
 </script>

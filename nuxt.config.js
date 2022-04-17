@@ -80,6 +80,7 @@ export default {
     FIREBASE_URL:
       process.env.FIREBASE_URL ||
       "https://nuxt-blog-793e5-default-rtdb.firebaseio.com",
+    FIREBASE_API_KEY: "AIzaSyCXcXX8O6dRWO8kH5jUu9lBXFcCCHSMepc",
   },
 
   // it will apply some styles when the page changes

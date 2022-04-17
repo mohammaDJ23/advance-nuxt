@@ -16,11 +16,13 @@ export default Vue.extend({
   },
   // @ts-ignore
   layout: "admin",
+  // @ts-ignore
+  middleware: ["init-token-state", "auth"],
   methods: {
     async submit(data: any) {
       const res = await this.$axios.$post(
         // @ts-ignore
-        `${process.env.FIREBASE_URL}/posts.json`,
+        `${process.env.FIREBASE_URL}/posts.json?auth=${this.$store.getters.getToken}`,
         data
       );
 

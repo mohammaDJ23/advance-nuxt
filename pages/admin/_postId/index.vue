@@ -15,18 +15,20 @@ export default Vue.extend({
     AdminPostForm,
   },
   // @ts-ignore
+  middleware: ["init-token-state", "auth"],
+  // @ts-ignore
   layout: "admin",
   // @ts-ignore
   async fetch({ $axios, store, params, error }) {
-    return (
-      $axios
+    return $axios
+      .$get(
         // @ts-ignore
-        .$get(`${process.env.FIREBASE_URL}/posts/${params.postId}.json`)
-        .then((data) => {
-          store.dispatch("setPost", data);
-        })
-        .catch((err) => error(err))
-    );
+        `${process.env.FIREBASE_URL}/posts/${params.postId}.json?auth=${store.getters.getToken}`
+      )
+      .then((data) => {
+        store.dispatch("setPost", data);
+      })
+      .catch((err) => error(err));
   },
   computed: {
     loadedPost() {
@@ -37,7 +39,7 @@ export default Vue.extend({
     async submit(data: any) {
       const res = await this.$axios.$put(
         // @ts-ignore
-        `${process.env.FIREBASE_URL}/posts/${this.$route.params.postId}.json`,
+        `${process.env.FIREBASE_URL}/posts/${this.$route.params.postId}.json?auth=${this.$store.getters.getToken}`,
         data
       );
 
